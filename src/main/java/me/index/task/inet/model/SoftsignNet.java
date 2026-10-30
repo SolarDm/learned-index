@@ -1,31 +1,23 @@
 package me.index.task.inet.model;
 
+import me.index.task.inet.Init;
 import me.index.task.inet.loss.Loss;
 
 import java.util.Random;
 
-public final class SoftsignNet implements Model {
+public final class SoftsignNet extends AbstractNet {
     public SoftsignNet(int[] layerSizes, double learningRate, int batchSize, Loss loss, Random rnd) {
-        throw new UnsupportedOperationException("TODO");
+        super(layerSizes, learningRate, batchSize, loss, rnd, Init.XAVIER, "softsign");
     }
 
     @Override
-    public double predict(double x) {
-        throw new UnsupportedOperationException("TODO");
+    protected double activate(double z) {
+        return z / (1.0 + Math.abs(z));
     }
 
     @Override
-    public double train(double[] xs, double[] ys, int epochs) {
-        throw new UnsupportedOperationException("TODO");
-    }
-
-    @Override
-    public String id() {
-        throw new UnsupportedOperationException("TODO");
-    }
-
-    @Override
-    public long sizeInBytes() {
-        throw new UnsupportedOperationException("TODO");
+    protected double derivative(double z, double value) {
+        double denominator = 1.0 + Math.abs(z);
+        return 1.0 / (denominator * denominator);
     }
 }
