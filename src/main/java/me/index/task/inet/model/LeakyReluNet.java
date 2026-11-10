@@ -1,31 +1,29 @@
 package me.index.task.inet.model;
 
+import me.index.task.inet.Init;
 import me.index.task.inet.loss.Loss;
 
 import java.util.Random;
 
-public final class LeakyReluNet implements Model {
+public final class LeakyReluNet extends MiniBatchNet {
+    private static final double SLOPE = 0.01;
+
     public LeakyReluNet(int[] layerSizes, double learningRate, int batchSize, Loss loss, Random rnd) {
-        throw new UnsupportedOperationException("TODO");
+        super(layerSizes, learningRate, batchSize, loss, rnd, Init.HE);
     }
 
     @Override
-    public double predict(double x) {
-        throw new UnsupportedOperationException("TODO");
+    protected double activation(double z) {
+        return z > 0 ? z : SLOPE * z;
     }
 
     @Override
-    public double train(double[] xs, double[] ys, int epochs) {
-        throw new UnsupportedOperationException("TODO");
+    protected double derivativeFromActivation(double activation) {
+        return activation > 0 ? 1.0 : SLOPE;
     }
 
     @Override
-    public String id() {
-        throw new UnsupportedOperationException("TODO");
-    }
-
-    @Override
-    public long sizeInBytes() {
-        throw new UnsupportedOperationException("TODO");
+    protected String activationName() {
+        return "leaky_relu";
     }
 }
